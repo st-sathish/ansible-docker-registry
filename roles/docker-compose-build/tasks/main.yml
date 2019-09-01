@@ -1,0 +1,19 @@
+---
+
+- name: Checking existing version
+  command: docker --version
+  register: docker_compose_current_version
+
+- include: ../../docker-compose-wipe/tasks/main.yml
+
+- name: Downloading docker
+  get_url: url=https://github.com/docker/compose/releases/download/{{docker_compose_version}}/docker-compose-`uname -s`-`uname -m` -o 
+           dest={{ docker_compose_dir }}
+           force=no
+  mode: 0755
+  sudo: yes
+
+- name: Ensure directories are chmod +x
+  file: dest={{ docker_compose_dir }} owner=root group=apache mode=u=rwX,g=rX,o=rX recurse=yes
+  command: find {{ docker_compose_dir }} -type d -exec chmod +x {} \;
+  sudo: yes

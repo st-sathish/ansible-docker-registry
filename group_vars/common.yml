@@ -1,0 +1,14 @@
+#The nginx version to use
+nginx_version: 1.2.4
+#Where to store nginx
+nginx_home: "{{usr_local_bin_dir}}/nginx-{{nginx_version}}"
+#Set to false to skip building nginx
+build_nginx: true
+#docker version
+docker_compose_version: 1.24.1
+# user local bin dir
+usr_local_bin_dir: /usr/local/bin
+# docker download dir
+docker_compose_dir: "{{usr_local_bin_dir}}"/docker-compose
+# aws ec2 user
+user_name: "ubuntu"

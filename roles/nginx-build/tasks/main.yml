@@ -1,0 +1,57 @@
+---
+
+- name: Install Git
+  apt: pkg=git update_cache=yes state=present
+  sudo: yes
+
+- name: Install PCRE library
+  apt: pkg=libpcre3-dev state=present
+  sudo: yes
+
+- name: Install OpenSSl development headers
+  apt: pkg=libssl-dev state=present
+  sudo: yes
+
+- name: Install build tools
+  apt: pkg=build-essential state=present
+  sudo: yes
+
+- name: Checking if nginx binary exists
+  stat: path={{usr_local_bin_dir}}/nginx/sbin/nginx
+  register: nginxpresent
+
+- include: ../../nginx-stop/tasks/main.yml
+
+- name: Downloading nginx
+  get_url: url=http://nginx.org/download/nginx-{{nginx_version}}.tar.gz
+           dest={{usr_local_bin_dir}}/nginx-{{nginx_version}}.tar.gz
+           force=no
+
+- name: Decompressing nginx
+  unarchive: src={{usr_local_bin_dir}}/nginx-{{nginx_version}}.tar.gz dest={{usr_local_bin_dir}} copy=no creates={{nginx_home}}
+
+- name: Preparing to build nginx
+  shell: ./configure --prefix={{usr_local_bin_dir}}/nginx --pid-path=/var/run/nginx.pid
+         chdir={{usr_local_bin_dir}}/nginx-{{nginx_version}}
+
+- name: Building nginx
+  shell: make
+         chdir={{usr_local_bin_dir}}/nginx-{{nginx_version}}
+
+- name: Installing nginx
+  shell: make install
+         chdir={{usr_local_bin_dir}}/nginx-{{nginx_version}}
+
+- name: Configuring nginx for http
+  template: src=nginx-http.conf dest={{usr_local_bin_dir}}/nginx/conf/nginx.conf
+  when: build_nginx
+
+- name: Configuring nginx init script
+  template: src=nginx dest=/etc/init.d/nginx mode=0755
+  when: build_nginx
+  sudo: yes
+
+- name: Setting nginx to start on boot
+  service: name=nginx state=stopped enabled=yes
+  when: build_nginx
+  sudo: yes

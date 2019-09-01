@@ -1,0 +1,12 @@
+---
+# This playbook setup all necessary software
+
+- hosts: docker-registry
+  user: "{{user_name}}"
+  sudo: yes
+
+  roles:
+    - docker-compose-build
+
+  vars_files:
+    - group_vars/common.yml
