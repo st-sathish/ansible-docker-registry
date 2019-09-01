@@ -51,3 +51,12 @@ ansible-playbook -K -i all-in-one.hosts all-in-one.yml
 ```sh
 sudo apt-get install libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev
 ```
+
+#### Tutorial link
+```sh
+https://www.exoscale.com/syslog/setup-private-docker-registry/
+
+https://blog.docker.com/2013/07/how-to-use-your-own-registry/
+
+https://github.com/docker/docker.github.io/blob/master/registry/deploying.md
+```

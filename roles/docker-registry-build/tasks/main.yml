@@ -1,2 +1,16 @@
 ---
 
+- name: Pulling docker registry image
+  command: docker pull registry:{{docker_registry_version}}
+  register: docker_registry
+
+- debug: msg={{docker_registry.stdout}}
+
+- name: Run the registry in port 5000 in the background
+  command: docker run -d -p 5000:5000 registry:{{docker_registry_version}}
+
+- name: Verify docker registry installed
+  command: docker ps
+  register: docker_ps
+
+- debug: msg={{docker_ps.stdout}}

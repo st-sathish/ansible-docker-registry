@@ -6,8 +6,9 @@
   sudo: yes
 
   roles:
-    - nginx-build
-    - docker-compose-build
+    #- nginx-build
+    #- docker-compose-build
+    - docker-registry-build
 
   vars_files:
     - group_vars/common.yml
