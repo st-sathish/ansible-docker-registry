@@ -1,19 +1,27 @@
 ---
 
-- name: Checking existing version
-  command: docker --version
-  register: docker_compose_current_version
-
 - include: ../../docker-compose-wipe/tasks/main.yml
 
-- name: Downloading docker
-  get_url: url=https://github.com/docker/compose/releases/download/{{docker_compose_version}}/docker-compose-`uname -s`-`uname -m` -o 
-           dest={{ docker_compose_dir }}
-           force=no
-  mode: 0755
-  sudo: yes
+- name: Add GPG key
+  apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
 
-- name: Ensure directories are chmod +x
-  file: dest={{ docker_compose_dir }} owner=root group=apache mode=u=rwX,g=rX,o=rX recurse=yes
-  command: find {{ docker_compose_dir }} -type d -exec chmod +x {} \;
-  sudo: yes
+- name: Add stable Docker repository
+  apt_repository:
+      repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+      state: present
+      update_cache: yes
+
+- name: Install latest Docker CE
+  apt: pkg=docker-ce state=present update_cache=yes
+
+- name: Checking dokcer version
+  command: docker --version
+  register: docker_version
+
+- debug: msg={{docker_version.stdout}}
+
+- name: Checking docker compose version
+  command: docker-compose --version
+  register: docker_compose_version
+
+- debug: msg={{docker_compose_version.stdout}}

@@ -1,14 +1,27 @@
 #The nginx version to use
 nginx_version: 1.2.4
 #Where to store nginx
-nginx_home: "{{usr_local_bin_dir}}/nginx-{{nginx_version}}"
+nginx_home: "{{ usr_local_bin_dir }}/nginx-{{nginx_version}}"
 #Set to false to skip building nginx
 build_nginx: true
-#docker version
-docker_compose_version: 1.24.1
-# user local bin dir
+
+
+# common options
 usr_local_bin_dir: /usr/local/bin
-# docker download dir
-docker_compose_dir: "{{usr_local_bin_dir}}"/docker-compose
-# aws ec2 user
 user_name: "ubuntu"
+
+# Service options.
+docker_service_state: started
+docker_service_enabled: true
+docker_restart_handler_state: restarted
+
+# Docker Compose options.
+docker_install_compose: true
+docker_compose_version: "1.24.1"
+docker_compose_path: "{{usr_local_bin_dir}}/docker-compose"
+
+# Used only for Debian/Ubuntu. Switch 'stable' to 'edge' if needed.
+docker_apt_release_channel: edge
+docker_apt_arch: amd64
+docker_apt_repository: "deb [arch={{ docker_apt_arch }}] https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
+docker_apt_ignore_key_error: true
