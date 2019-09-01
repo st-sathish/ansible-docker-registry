@@ -1,6 +1,6 @@
 ---
 
-- include: ../../docker-compose-wipe/tasks/main.yml
+#- include: ../../docker-compose-wipe/tasks/main.yml
 
 - name: Add GPG key
   apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
@@ -14,7 +14,7 @@
 - name: Install latest Docker CE
   apt: pkg=docker-ce state=present update_cache=yes
 
-- name: Checking dokcer version
+- name: Checking docker version
   command: docker --version
   register: docker_version
 
@@ -25,3 +25,6 @@
   register: docker_compose_version
 
 - debug: msg={{docker_compose_version.stdout}}
+
+- name: Ensure Docker is started and enabled at boot.
+  service: name=docker state=started enabled=true

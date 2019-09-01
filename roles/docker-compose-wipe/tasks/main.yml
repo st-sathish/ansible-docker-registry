@@ -1,2 +1,16 @@
 ---
 
+- include: ../../docker-compose-stop/tasks/main.yml
+
+- name: stop and disable docker
+  service: name=docker state=stopped enabled=no
+  sudo: yes
+  when: dockerpresent.stat.exists is defined and dockerpresent.stat.exists == True
+
+- name: Uninstall docker
+  apt: pkg=docker-ce state=absent
+  sudo: yes
+
+- name: Delete images, containers and volumes
+  file: path=/var/lib/docker state=absent
+  sudo: yes

@@ -1,0 +1,10 @@
+---
+
+- name: Checking if docker exists
+  stat: path=/usr/bin/docker
+  register: dockerpresent
+
+- name: Stopping docker
+  service: name=docker state=stopped
+  when: dockerpresent.stat.exists is defined and dockerpresent.stat.exists == True
+  sudo: yes
