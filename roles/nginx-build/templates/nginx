@@ -53,7 +53,7 @@
 #                                                                     Variables
 # -----------------------------------------------------------------------------
 
-readonly PATH={{usr_local_bin_dir}}/nginx/sbin:/opt/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+readonly PATH={{xn_tools_dir}}/nginx/sbin:/opt/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # The name of the daemon.
 readonly NAME=nginx

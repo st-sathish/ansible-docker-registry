@@ -1,7 +1,7 @@
 ---
 
 - name: Checking if nginx exists
-  stat: 
+  stat: path={{xn_tools_dir}}/nginx/sbin/nginx
   register: nginxpresent
 
 - name: Stopping nginx

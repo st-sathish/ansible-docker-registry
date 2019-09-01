@@ -1,13 +1,15 @@
+# common options
+usr_local_bin_dir: /usr/local/bin
+xn_tools_dir: /opt/tools
+xn_tool_archive_dir: "{{xn_tools_dir}}/downloads"
+
 #The nginx version to use
-nginx_version: 1.2.4
+nginx_version: 1.17.2
 #Where to store nginx
-nginx_home: "{{ usr_local_bin_dir }}/nginx-{{nginx_version}}"
+nginx_home: "{{xn_tools_dir}}/nginx-{{nginx_version}}"
 #Set to false to skip building nginx
 build_nginx: true
 
-
-# common options
-usr_local_bin_dir: /usr/local/bin
 user_name: "ubuntu"
 
 # Service options.

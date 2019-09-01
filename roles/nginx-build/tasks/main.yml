@@ -1,5 +1,13 @@
 ---
 
+- name: Create /opt/tools dir
+  file: path={{xn_tools_dir}} state=directory
+  sudo: yes
+
+- name: Create /opt/tools/downloads dir
+  file: path={{xn_tool_archive_dir}} state=directory
+  sudo: yes
+
 - name: Install Git
   apt: pkg=git update_cache=yes state=present
   sudo: yes
@@ -17,33 +25,33 @@
   sudo: yes
 
 - name: Checking if nginx binary exists
-  stat: path={{usr_local_bin_dir}}/nginx/sbin/nginx
+  stat: path={{xn_tools_dir}}/nginx/sbin/nginx
   register: nginxpresent
 
 - include: ../../nginx-stop/tasks/main.yml
 
 - name: Downloading nginx
   get_url: url=http://nginx.org/download/nginx-{{nginx_version}}.tar.gz
-           dest={{usr_local_bin_dir}}/nginx-{{nginx_version}}.tar.gz
+           dest={{xn_tool_archive_dir}}/nginx-{{nginx_version}}.tar.gz
            force=no
 
 - name: Decompressing nginx
-  unarchive: src={{usr_local_bin_dir}}/nginx-{{nginx_version}}.tar.gz dest={{usr_local_bin_dir}} copy=no creates={{nginx_home}}
+  unarchive: src={{xn_tool_archive_dir}}/nginx-{{nginx_version}}.tar.gz dest={{xn_tools_dir}} copy=no creates={{nginx_home}}
 
 - name: Preparing to build nginx
-  shell: ./configure --prefix={{usr_local_bin_dir}}/nginx --pid-path=/var/run/nginx.pid
-         chdir={{usr_local_bin_dir}}/nginx-{{nginx_version}}
+  shell: ./configure --prefix={{xn_tools_dir}}/nginx --pid-path=/var/run/nginx.pid
+         chdir={{xn_tools_dir}}/nginx-{{nginx_version}}
 
 - name: Building nginx
   shell: make
-         chdir={{usr_local_bin_dir}}/nginx-{{nginx_version}}
+         chdir={{xn_tools_dir}}/nginx-{{nginx_version}}
 
 - name: Installing nginx
   shell: make install
-         chdir={{usr_local_bin_dir}}/nginx-{{nginx_version}}
+         chdir={{xn_tools_dir}}/nginx-{{nginx_version}}
 
 - name: Configuring nginx for http
-  template: src=nginx-http.conf dest={{usr_local_bin_dir}}/nginx/conf/nginx.conf
+  template: src=nginx-http.conf dest={{xn_tools_dir}}/nginx/conf/nginx.conf
   when: build_nginx
 
 - name: Configuring nginx init script
