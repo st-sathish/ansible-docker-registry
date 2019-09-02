@@ -1,7 +1,5 @@
 ---
 
-#- include: ../../docker-compose-wipe/tasks/main.yml
-
 - name: Add GPG key
   apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
 
