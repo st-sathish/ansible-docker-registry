@@ -48,6 +48,7 @@ ansible-playbook -K -i all-in-one.hosts all-in-one.yml
 
 ### Library
 <p> If you face any error while installing nginx please install below command to install missing dependencies </p>
+
 ```sh
 sudo apt-get install libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev
 ```
